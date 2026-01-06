@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>24PDC</title>
+  <title>PDC Generator</title>
+
+  <!-- Tab icon (upload your icon as favicon.png in the repo root) -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.png">
 
   <style>
     /* ===== Theme tokens (Light default) ===== */
@@ -103,6 +107,7 @@
       margin: 0 0 12px 0;
       font-size: 17px;
       letter-spacing: -0.2px;
+      font-weight: 950;
     }
 
     .sideGroup{
@@ -118,7 +123,7 @@
       border: none;
       border-radius: 10px;
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       background: var(--pillBg);
       transition: 0.2s;
@@ -183,7 +188,7 @@
     label{
       display: block;
       margin-top: 14px;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 14px;
       color: var(--text);
       opacity: 0.95;
@@ -351,7 +356,6 @@
     }
     .switch.on .switchKnob{ left: 23px; }
 
-    /* Pages */
     .modeSection{ display:none; }
 
     .steps{ margin:12px 0 0 0; padding:0; list-style:none; }
@@ -447,7 +451,7 @@
         <div class="topRow">
           <div>
             <h2>PDC Generator</h2>
-            <p class="subtitle">Fast PDC builder • If you want a different format added, MSG @aviator.kid on discord • copy is Discord-ready</p>
+            <p class="subtitle">Fast PDC builder • squawk avoids 8/9 • copy is Discord-ready</p>
           </div>
         </div>
         <div class="accent"></div>
@@ -611,14 +615,6 @@
             Toggle Light/Dark in the sidebar. Your choice is saved.
           </li>
         </ul>
-
-        <div class="sectionTitle">Examples</div>
-
-        <label style="margin-top:10px;">ATC24 Standard Example</label>
-        <pre style="min-height:0;">WJA550L | CLEARED TO IPPH | VIA GPS DCT | INTL FL020 | CLIMB FL040 | RWY 13 | DEP FREQ 132.300 | QNH 1013 | REMAIN TWR UNTIL FL010 | SQUAWK 0604 | DO NOT READBACK PDC</pre>
-
-        <label style="margin-top:14px;">VATUSA Example</label>
-        <pre style="min-height:0;">ACARS: PDC | CALLSIGN: DAL125 | EQUIPMENT: B738/L | DEPARTURE: IFRD | DESTINATION: IPPH | ROUTE: GPS DCT | ALTITUDE: FL350 | SQUAWK: 0623 | REMARKS: CLEARED SUMMA2 DEPARTURE CLIMB VIA SID EXP FL350 10 MIN AFT DP, DPFRQ 124.850 CTC 121.900 FOR TAXI</pre>
       </div>
 
       <!-- Credits Page -->
@@ -681,7 +677,6 @@
     let pdcMode = "ATC24";
     function setMode(mode){
       pdcMode = mode;
-
       $("atc24Btn").classList.toggle("active", mode === "ATC24");
       $("vatusaBtn").classList.toggle("active", mode === "VATUSA");
 
