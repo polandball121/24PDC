@@ -1,0 +1,322 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PDC Generator</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #eaeff2;
+      margin: 0;
+      padding: 40px 16px;
+      display: flex;
+      justify-content: center;
+      color: #111827;
+    }
+
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 760px;
+      padding: 24px 28px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+      border: 1px solid rgba(17,24,39,0.06);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      font-size: 26px;
+      line-height: 1.1;
+      margin: 0;
+      letter-spacing: -0.2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .accent {
+      width: 64px;
+      height: 4px;
+      background: #2d5dfc;
+      border-radius: 2px;
+      margin: 12px 0 18px 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 650;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1.6px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: 0.2s;
+      background: #fff;
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    input:focus {
+      border-color: #2d5dfc;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(45,93,252,0.14);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      padding: 12px 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      user-select: none;
+    }
+
+    #gen {
+      background: #2d5dfc;
+      color: white;
+    }
+    #gen:hover { background: #1e4be0; transform: translateY(-1px); }
+    #gen:active { transform: translateY(0px); }
+
+    #copy {
+      background: #111827;
+      color: white;
+    }
+    #copy:hover { background: #000000; transform: translateY(-1px); }
+    #copy:active { transform: translateY(0px); }
+
+    .hint {
+      font-size: 12.5px;
+      color: #6b7280;
+      margin-top: 10px;
+      line-height: 1.35;
+    }
+
+    pre {
+      background: #0b1220;
+      color: #a3e635;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      margin-top: 18px;
+      min-height: 54px;
+      border: 2px solid #111827;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+      .buttons { grid-template-columns: 1fr; }
+      .card { padding: 20px 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="topbar">
+      <div>
+        <h2>PDC Generator</h2>
+        <p class="subtitle">Quick ATC24-style PDC builder 
+		</p>
+      </div>
+    </div>
+
+    <div class="accent"></div>
+
+    <label>Callsign</label>
+    <input id="callsign" placeholder="WJA550L" />
+
+    <div class="row">
+      <div>
+        <label>Route (if N/A → GPS DCT)</label>
+        <input id="route" placeholder="N/A or GPS Direct" />
+      </div>
+      <div>
+        <label>RWY</label>
+        <input id="runway" placeholder="13" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>INTL FL (optional)</label>
+        <input id="intlFL" placeholder="020" />
+      </div>
+      <div>
+        <label>CLIMB FL</label>
+        <input id="climbFL" placeholder="040" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>DEP FREQ</label>
+        <input id="depFreq" placeholder="132.3" />
+      </div>
+      <div>
+        <label>QNH</label>
+        <input id="qnh" placeholder="1013" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>TRANS ALT (optional)</label>
+        <input id="transAlt" placeholder="1000" />
+      </div>
+      <div>
+        <label>REMAIN TWR UNTIL (optional)</label>
+        <input id="remainTwrUntil" placeholder="010" />
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="gen" type="button">Generate</button>
+      <button id="copy" type="button">Copy</button>
+    </div>
+
+    <div class="hint">
+      Tip: Copy wraps the message in backticks so it pastes like a clean “code-style” PDC line in Discord.
+    </div>
+
+    <pre id="out"></pre>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    // store used squawks in browser session so you don't repeat
+    const USED_KEY = "pdc_used_squawks_no89";
+    function getUsedSet() {
+      try {
+        const arr = JSON.parse(sessionStorage.getItem(USED_KEY) || "[]");
+        return new Set(arr);
+      } catch {
+        return new Set();
+      }
+    }
+    function saveUsedSet(set) {
+      sessionStorage.setItem(USED_KEY, JSON.stringify([...set]));
+    }
+
+    function normalizeRoute(route) {
+      const r = String(route || "").trim().toUpperCase();
+      if (!r || r === "N/A" || r === "NA") return "GPS DCT";
+      return r;
+    }
+
+    function toFL(value) {
+      const v = String(value ?? "").trim().toUpperCase();
+      if (!v) return "";
+      if (v.startsWith("FL")) return v;
+      const digits = v.replace(/\D/g, "").padStart(3, "0").slice(-3);
+      return `FL${digits}`;
+    }
+
+    function generateUniqueSquawk() {
+      // Allowed digits: 0-7 ONLY (so 8/9 never appear)
+      const used = getUsedSet();
+      for (let attempts = 0; attempts < 5000; attempts++) {
+        let code = "";
+        for (let i = 0; i < 4; i++) code += String(Math.floor(Math.random() * 8)); // 0..7
+        if (!/^[0-7]{4}$/.test(code)) continue;
+        if (used.has(code)) continue;
+        used.add(code);
+        saveUsedSet(used);
+        return code;
+      }
+      throw new Error("Could not generate a unique squawk (session exhausted).");
+    }
+
+    $("gen").onclick = () => {
+      const callsign = $("callsign").value.trim().toUpperCase();
+      if (!callsign) {
+        $("out").textContent = "Error: Callsign is required.";
+        return;
+      }
+
+      const route = normalizeRoute($("route").value);
+      const runway = $("runway").value.trim();
+      const depFreq = $("depFreq").value.trim();
+      const qnh = $("qnh").value.trim();
+      const intlFL = toFL($("intlFL").value);
+      const climbFL = toFL($("climbFL").value);
+      const transAlt = $("transAlt").value.trim();
+      const remainTwrUntil = toFL($("remainTwrUntil").value);
+
+      const squawk = generateUniqueSquawk();
+
+      const parts = [];
+      parts.push(callsign);
+
+      // "VIA " + route (no parentheses)
+      parts.push(`VIA ${route}`);
+
+      if (intlFL) parts.push(`INTL ${intlFL}`);
+      if (climbFL) parts.push(`CLIMB ${climbFL}`);
+      if (runway) parts.push(`RWY ${runway}`);
+      if (depFreq) parts.push(`DEP FREQ ${depFreq}`);
+      if (qnh) parts.push(`QNH ${qnh}`);
+      if (transAlt) parts.push(`TRANS ALT ${transAlt}`);
+      if (remainTwrUntil) parts.push(`REMAIN TWR UNTIL ${remainTwrUntil}`);
+
+      // squawk last, and then the instruction
+      parts.push(`SQUAWK ${squawk}`);
+      parts.push(`DO NOT READBACK PDC`);
+
+      $("out").textContent = parts.join(" | ");
+    };
+
+    $("copy").onclick = async () => {
+      const text = $("out").textContent.trim();
+      if (!text) return;
+
+      // Copies wrapped in backticks so it pastes as a code-style message
+      await navigator.clipboard.writeText("`" + text + "`");
+    };
+  </script>
+</body>
+</html>
