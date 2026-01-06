@@ -10,7 +10,6 @@
   <link rel="shortcut icon" href="favicon.png">
 
   <style>
-    /* ===== Theme tokens (Light default) ===== */
     :root{
       --bg: #eaeff2;
       --card: #ffffff;
@@ -45,7 +44,6 @@
       --success: #22c55e;
     }
 
-    /* ===== Dark mode overrides ===== */
     body.dark{
       --bg: #0b1220;
       --card: #0f172a;
@@ -277,7 +275,6 @@
       word-break: break-word;
     }
 
-    /* VATUSA pill toggle */
     .toggleWrap{
       margin-top: 10px;
       background: var(--pillBg);
@@ -316,7 +313,6 @@
       line-height: 1.15;
     }
 
-    /* Theme switch */
     .switchRow{
       display:flex;
       align-items:center;
@@ -401,17 +397,9 @@
       border: 1px solid var(--border);
       margin-bottom: 10px;
     }
-    .creditRole{
-      font-weight: 950;
-      letter-spacing: -0.2px;
-    }
-    .creditName{
-      font-weight: 900;
-      color: var(--accent);
-      text-align:right;
-    }
+    .creditRole{ font-weight: 950; letter-spacing: -0.2px; }
+    .creditName{ font-weight: 900; color: var(--accent); text-align:right; }
 
-    /* ===== Rating button + modal + toast ===== */
     .fab{
       position: fixed;
       right: 18px;
@@ -484,10 +472,7 @@
       opacity: 0.65;
       transition: transform .1s, opacity .1s, filter .1s;
     }
-    .star.active{
-      filter: grayscale(0);
-      opacity: 1;
-    }
+    .star.active{ filter: grayscale(0); opacity: 1; }
     .star:hover{ transform: translateY(-1px); }
 
     .modalBtns{
@@ -524,7 +509,6 @@
       font-size: 13px;
       font-weight: 850;
     }
-
     .toast.ok{ border-left: 5px solid var(--success); }
     .toast.err{ border-left: 5px solid var(--danger); }
 
@@ -540,7 +524,6 @@
 
 <body>
   <div class="layout">
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <h3>Menu</h3>
       <button id="genPageBtn" class="navBtn active">Generator</button>
@@ -568,10 +551,8 @@
       </div>
     </div>
 
-    <!-- MAIN -->
     <div class="card">
 
-      <!-- Generator Page -->
       <div id="generatorPage">
         <div class="topRow">
           <div>
@@ -581,14 +562,12 @@
         </div>
         <div class="accent"></div>
 
-        <!-- Shared -->
         <label>Callsign</label>
         <input id="callsign" placeholder="WJA550L / DAL125 / AAL3" />
 
         <label>Route (if N/A → GPS DCT)</label>
         <input id="route" placeholder="N/A or GPS Direct" />
 
-        <!-- ATC24 SECTION -->
         <div id="atc24Section" class="modeSection" style="display:block;">
           <div class="sectionTitle">ATC24 Standard Fields</div>
 
@@ -644,7 +623,6 @@
           </div>
         </div>
 
-        <!-- VATUSA SECTION -->
         <div id="vatusaSection" class="modeSection">
           <div class="sectionTitle">VATUSA Fields</div>
 
@@ -710,7 +688,6 @@
         <pre id="out"></pre>
       </div>
 
-      <!-- Instructions Page -->
       <div id="instructionsPage" style="display:none;">
         <div class="topRow">
           <div>
@@ -725,10 +702,10 @@
           <li><b>2) Fill the fields</b> Callsign + Route, then the format-specific fields.</li>
           <li><b>3) Generate</b> Squawk uses <span class="chip">0–7 only</span> and won’t repeat in the same tab session.</li>
           <li><b>4) Copy</b> Copy wraps output in backticks for Discord.</li>
+          <li><b>ATC24 End Line</b> Override/remove “DO NOT READBACK PDC” and add extra text if needed.</li>
         </ul>
       </div>
 
-      <!-- Credits Page -->
       <div id="creditsPage" style="display:none;">
         <div class="topRow">
           <div>
@@ -763,10 +740,8 @@
     </div>
   </div>
 
-  <!-- Rating floating button -->
   <button id="rateBtn" class="fab" type="button">Rate (1–5)</button>
 
-  <!-- Rating modal -->
   <div id="rateOverlay" class="modalOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rateTitle">
       <div class="modalHeader">
@@ -799,13 +774,11 @@
     </div>
   </div>
 
-  <!-- Bottom-right toast -->
   <div id="toast" class="toast"></div>
 
   <script>
     const $ = (id) => document.getElementById(id);
 
-    // ===== Pages =====
     function setPage(page){
       const gen = $("generatorPage");
       const help = $("instructionsPage");
@@ -823,7 +796,6 @@
     $("helpPageBtn").onclick = () => setPage("help");
     $("creditsPageBtn").onclick = () => setPage("credits");
 
-    // ===== Mode switching =====
     let pdcMode = "ATC24";
     function setMode(mode){
       pdcMode = mode;
@@ -836,7 +808,6 @@
     $("atc24Btn").onclick = () => setMode("ATC24");
     $("vatusaBtn").onclick = () => setMode("VATUSA");
 
-    // ===== Theme toggle (saved) =====
     const THEME_KEY = "pdc_theme";
     function applyTheme(theme){
       document.body.classList.toggle("dark", theme === "dark");
@@ -854,7 +825,6 @@
     $("themeSwitch").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") toggleTheme(); };
     applyTheme(localStorage.getItem(THEME_KEY) || "light");
 
-    // ===== VATUSA toggle state =====
     let groundContactMode = "PUSH";
     function setVatusaToggle(mode){
       groundContactMode = mode;
@@ -868,7 +838,6 @@
     $("pillPush").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("PUSH"); };
     $("pillTaxi").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("TAXI"); };
 
-    // ===== Helpers =====
     function normalizeRoute(route){
       const r = String(route || "").trim().toUpperCase();
       if (!r || r === "N/A" || r === "NA") return "GPS DCT";
@@ -882,14 +851,10 @@
       return `FL${digits}`;
     }
 
-    // ===== Session-unique squawk 0–7 only =====
     const USED_KEY = "pdc_used_squawks_no89";
     function getUsedSet(){
-      try{
-        return new Set(JSON.parse(sessionStorage.getItem(USED_KEY) || "[]"));
-      } catch {
-        return new Set();
-      }
+      try{ return new Set(JSON.parse(sessionStorage.getItem(USED_KEY) || "[]")); }
+      catch{ return new Set(); }
     }
     function saveUsedSet(set){
       sessionStorage.setItem(USED_KEY, JSON.stringify([...set]));
@@ -898,7 +863,7 @@
       const used = getUsedSet();
       for (let attempts = 0; attempts < 5000; attempts++){
         let code = "";
-        for (let i = 0; i < 4; i++) code += String(Math.floor(Math.random() * 8)); // 0..7
+        for (let i = 0; i < 4; i++) code += String(Math.floor(Math.random() * 8));
         if (used.has(code)) continue;
         used.add(code);
         saveUsedSet(used);
@@ -907,13 +872,9 @@
       throw new Error("Could not generate a unique squawk (session exhausted).");
     }
 
-    // ===== Generate =====
     $("gen").onclick = () => {
       const callsign = $("callsign").value.trim().toUpperCase();
-      if (!callsign){
-        $("out").textContent = "Error: Callsign is required.";
-        return;
-      }
+      if (!callsign){ $("out").textContent = "Error: Callsign is required."; return; }
 
       const route = normalizeRoute($("route").value);
       const squawk = generateUniqueSquawk();
@@ -950,15 +911,12 @@
         if (endMode === "DO_NOT_READBACK") parts.push("DO NOT READBACK PDC");
         else if (endMode === "READBACK_SQUAWK") parts.push("READBACK SQUAWK");
         else if (endMode === "READBACK_FULL") parts.push("READBACK FULL PDC");
-        // NONE -> add nothing
-
         if (extraEnd) parts.push(extraEnd);
 
         $("out").textContent = parts.join(" | ");
         return;
       }
 
-      // ===== VATUSA =====
       const dep = $("vat_dep").value.trim().toUpperCase();
       const dest = $("vat_dest").value.trim().toUpperCase();
       const equip = $("vat_equip").value.trim().toUpperCase();
@@ -991,14 +949,12 @@
         ` | REMARKS: CLEARED ${sid} DEPARTURE CLIMB VIA SID${maintainPart} EXP ${filedAlt} 10 MIN AFT DP, DPFRQ ${dpFreq} ${contactPart}`;
     };
 
-    // ===== Copy =====
     $("copy").onclick = async () => {
       const text = $("out").textContent.trim();
-      if (!text) return;
+      if(!text) return;
       await navigator.clipboard.writeText("`" + text + "`");
     };
 
-    // ===== Toast =====
     let toastTimer = null;
     function showToast(msg, type){
       const t = $("toast");
@@ -1009,8 +965,7 @@
       toastTimer = setTimeout(() => { t.style.display = "none"; }, 3800);
     }
 
-    // ===== Rating system (private to you via Discord webhook) =====
-    // Create a Discord webhook in your private channel and paste it here:
+    // ===== Rating (Discord webhook) =====
     const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1458020445336113227/NvbjEyGk2JaVYBmSVbdrnvLVUCjUKg6xaKYnaZqkzIz9TL_Bb2t7o-AbZVVL-hhnrf90";
 
     const RATE_KEY = "pdc_has_rated";
@@ -1024,7 +979,6 @@
       $("rateOverlay").style.display = "none";
       $("rateOverlay").setAttribute("aria-hidden", "true");
     }
-
     function paintStars(n){
       [...document.querySelectorAll(".star")].forEach(st => {
         const v = Number(st.dataset.v);
@@ -1063,7 +1017,6 @@
         closeRate();
         return;
       }
-
       if (!selectedRating){
         showToast("Pick a star rating first 🙂", "err");
         return;
@@ -1071,14 +1024,6 @@
 
       const comment = $("rateComment").value.trim();
       const page = location.href;
-
-      // If you didn't set the webhook, don't hard-fail the whole tool.
-      if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes("https://discord.com/api/webhooks/1458020445336113227/NvbjEyGk2JaVYBmSVbdrnvLVUCjUKg6xaKYnaZqkzIz9TL_Bb2t7o-AbZVVL-hhnrf90")){
-        localStorage.setItem(RATE_KEY, "1");
-        showToast("Rating saved locally — webhook not set yet.", "ok");
-        closeRate();
-        return;
-      }
 
       try{
         const payload = {
