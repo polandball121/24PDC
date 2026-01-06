@@ -3,252 +3,733 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PDC Generator</title>
+  <title>24PDC</title>
 
   <style>
-    body {
+    /* ===== Theme tokens (Light default) ===== */
+    :root{
+      --bg: #eaeff2;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: rgba(17,24,39,0.10);
+      --shadow: 0 10px 28px rgba(0,0,0,0.09);
+      --shadowSoft: 0 6px 16px rgba(0,0,0,0.06);
+
+      --accent: #2d5dfc;
+
+      --inputBg: #ffffff;
+      --inputBorder: #d1d5db;
+
+      --btnPrimary: #2d5dfc;
+      --btnPrimaryHover: #1e4be0;
+
+      --btnDark: #111827;
+      --btnDarkHover: #000000;
+
+      --pillBg: #f3f4f6;
+      --pillActiveBg: #111827;
+      --pillActiveText: #ffffff;
+
+      --preBg: #0b1220;
+      --preText: #4ade80;
+      --preBorder: #111827;
+
+      --divider: #eef2f7;
+    }
+
+    /* ===== Dark mode overrides ===== */
+    body.dark{
+      --bg: #0b1220;
+      --card: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(255,255,255,0.10);
+      --shadow: 0 10px 28px rgba(0,0,0,0.40);
+      --shadowSoft: 0 6px 16px rgba(0,0,0,0.35);
+
+      --accent: #60a5fa;
+
+      --inputBg: #0b1220;
+      --inputBorder: rgba(255,255,255,0.16);
+
+      --btnPrimary: #60a5fa;
+      --btnPrimaryHover: #3b82f6;
+
+      --btnDark: #111827;
+      --btnDarkHover: #0b1220;
+
+      --pillBg: rgba(255,255,255,0.06);
+      --pillActiveBg: #e5e7eb;
+      --pillActiveText: #0b1220;
+
+      --preBg: #020617;
+      --preText: #86efac;
+      --preBorder: rgba(255,255,255,0.12);
+
+      --divider: rgba(255,255,255,0.08);
+    }
+
+    body{
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #eaeff2;
+      background: var(--bg);
       margin: 0;
       padding: 40px 16px;
       display: flex;
       justify-content: center;
-      color: #111827;
+      color: var(--text);
+      transition: background .2s, color .2s;
     }
 
-    .card {
-      background: #ffffff;
+    .layout{
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 18px;
       width: 100%;
-      max-width: 760px;
-      padding: 24px 28px;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
-      border: 1px solid rgba(17,24,39,0.06);
+      max-width: 1060px;
     }
 
-    .topbar {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 6px;
+    .sidebar{
+      background: var(--card);
+      padding: 18px;
+      border-radius: 14px;
+      box-shadow: var(--shadowSoft);
+      height: fit-content;
+      border-left: 5px solid var(--accent);
+      border: 1px solid var(--border);
     }
 
-    h2 {
-      font-size: 26px;
-      line-height: 1.1;
-      margin: 0;
+    .sidebar h3{
+      margin: 0 0 12px 0;
+      font-size: 17px;
       letter-spacing: -0.2px;
     }
 
-    .subtitle {
-      font-size: 13px;
-      color: #6b7280;
+    .sideGroup{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--divider);
+    }
+
+    .sidebar button.navBtn{
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--pillBg);
+      transition: 0.2s;
+      text-align: left;
+      color: var(--text);
+    }
+
+    .sidebar button.navBtn.active{
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sidebar button.navBtn:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+    }
+
+    .hint{
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .card{
+      background: var(--card);
+      padding: 22px 26px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: background .2s, border-color .2s;
+    }
+
+    .topRow{
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h2{
+      font-size: 25px;
+      margin: 0 0 4px 0;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle{
       margin: 0;
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    .accent {
-      width: 64px;
+    .accent{
+      width: 58px;
       height: 4px;
-      background: #2d5dfc;
+      background: var(--accent);
       border-radius: 2px;
-      margin: 12px 0 18px 0;
+      margin: 10px 0 18px 0;
     }
 
-    label {
+    label{
       display: block;
       margin-top: 14px;
-      font-weight: 650;
+      font-weight: 900;
       font-size: 14px;
-      color: #374151;
+      color: var(--text);
+      opacity: 0.95;
     }
 
-    input {
+    input{
       width: 100%;
       padding: 10px 12px;
       margin-top: 6px;
-      border: 1.6px solid #d1d5db;
+      border: 1.6px solid var(--inputBorder);
       border-radius: 10px;
       font-size: 14px;
       transition: 0.2s;
-      background: #fff;
+      background: var(--inputBg);
+      color: var(--text);
     }
 
-    input::placeholder {
-      color: #9ca3af;
-    }
+    input::placeholder{ color: var(--muted); opacity: 0.75; }
 
-    input:focus {
-      border-color: #2d5dfc;
+    input:focus{
+      border-color: var(--accent);
       outline: none;
       box-shadow: 0 0 0 3px rgba(45,93,252,0.14);
     }
+    body.dark input:focus{
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
+    }
 
-    .row {
+    .row{
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       margin-top: 6px;
     }
 
-    .buttons {
+    .sectionTitle{
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--divider);
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 950;
+      letter-spacing: 0.35px;
+      text-transform: uppercase;
+    }
+
+    .buttons{
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
-    button {
-      padding: 12px 14px;
+    button.action{
+      padding: 12px;
       border: none;
       border-radius: 12px;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 950;
       cursor: pointer;
       transition: 0.2s;
-      user-select: none;
     }
 
-    #gen {
-      background: #2d5dfc;
-      color: white;
-    }
-    #gen:hover { background: #1e4be0; transform: translateY(-1px); }
-    #gen:active { transform: translateY(0px); }
+    #gen{ background: var(--btnPrimary); color: #fff; }
+    #gen:hover{ background: var(--btnPrimaryHover); }
 
-    #copy {
-      background: #111827;
-      color: white;
-    }
-    #copy:hover { background: #000000; transform: translateY(-1px); }
-    #copy:active { transform: translateY(0px); }
+    #copy{ background: var(--btnDark); color: #fff; }
+    #copy:hover{ background: var(--btnDarkHover); }
 
-    .hint {
-      font-size: 12.5px;
-      color: #6b7280;
-      margin-top: 10px;
-      line-height: 1.35;
-    }
-
-    pre {
-      background: #0b1220;
-      color: #a3e635;
+    pre{
+      background: var(--preBg);
+      color: var(--preText);
       padding: 16px;
       border-radius: 14px;
       font-size: 13.5px;
-      margin-top: 18px;
-      min-height: 54px;
-      border: 2px solid #111827;
-      overflow-x: auto;
+      margin-top: 20px;
+      min-height: 70px;
+      border: 2px solid var(--preBorder);
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    /* Mobile */
-    @media (max-width: 640px) {
-      .row { grid-template-columns: 1fr; }
-      .buttons { grid-template-columns: 1fr; }
-      .card { padding: 20px 18px; }
+    /* VATUSA pill toggle */
+    .toggleWrap{
+      margin-top: 10px;
+      background: var(--pillBg);
+      border-radius: 12px;
+      padding: 6px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .pill{
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 950;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      background: transparent;
+      color: var(--text);
+      transition: 0.15s;
+    }
+
+    .pill.active{
+      background: var(--pillActiveBg);
+      color: var(--pillActiveText);
+    }
+
+    .pill small{
+      display: block;
+      font-weight: 700;
+      opacity: 0.82;
+      margin-top: 2px;
+      font-size: 11.5px;
+      line-height: 1.15;
+    }
+
+    /* Theme switch */
+    .switchRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .switchLabel{
+      font-size:13px;
+      color: var(--muted);
+      font-weight: 850;
+    }
+    .switch{
+      position: relative;
+      width: 48px;
+      height: 28px;
+      background: var(--pillBg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: .2s;
+      flex: 0 0 auto;
+    }
+    .switchKnob{
+      position:absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: .2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+    body.dark .switchKnob{ box-shadow: 0 4px 10px rgba(0,0,0,0.35); }
+    .switch.on{
+      background: rgba(45,93,252,0.18);
+      border-color: rgba(45,93,252,0.35);
+    }
+    body.dark .switch.on{
+      background: rgba(96,165,250,0.18);
+      border-color: rgba(96,165,250,0.35);
+    }
+    .switch.on .switchKnob{ left: 23px; }
+
+    /* Pages */
+    .modeSection{ display:none; }
+
+    .steps{ margin:12px 0 0 0; padding:0; list-style:none; }
+    .steps li{
+      padding:12px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background: rgba(255,255,255,0.02);
+      margin-bottom:10px;
+    }
+    .steps b{ display:block; margin-bottom:4px; letter-spacing:-0.1px; }
+    .chipRow{ display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; }
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      background: var(--pillBg);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .creditCard{
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+    }
+    .creditRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: var(--pillBg);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .creditRole{
+      font-weight: 950;
+      letter-spacing: -0.2px;
+    }
+    .creditName{
+      font-weight: 900;
+      color: var(--accent);
+      text-align:right;
+    }
+
+    @media (max-width: 820px){
+      .layout{ grid-template-columns: 1fr; }
+      .row{ grid-template-columns: 1fr; }
+      .buttons{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <div class="topbar">
-      <div>
-        <h2>PDC Generator</h2>
-        <p class="subtitle">Quick ATC24-style PDC builder 
-		</p>
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h3>Menu</h3>
+      <button id="genPageBtn" class="navBtn active">Generator</button>
+      <button id="helpPageBtn" class="navBtn">Instructions</button>
+      <button id="creditsPageBtn" class="navBtn">Credits</button>
+
+      <div class="sideGroup">
+        <h3 style="margin:0 0 10px 0; font-size:15px;">PDC Type</h3>
+        <button id="atc24Btn" class="navBtn active">ATC24 Standard <span style="font-weight:800;opacity:.85;">(Default)</span></button>
+        <button id="vatusaBtn" class="navBtn">VATUSA Format</button>
+        <div class="hint">Fields change based on the format.</div>
+      </div>
+
+      <div class="sideGroup">
+        <div class="switchRow">
+          <div>
+            <div style="font-weight:950;font-size:14px;">Theme</div>
+            <div class="switchLabel">Light / Dark</div>
+          </div>
+          <div id="themeSwitch" class="switch" role="switch" aria-checked="false" tabindex="0">
+            <div class="switchKnob"></div>
+          </div>
+        </div>
+        <div class="hint">Saved automatically for next time.</div>
       </div>
     </div>
 
-    <div class="accent"></div>
+    <!-- MAIN -->
+    <div class="card">
 
-    <label>Callsign</label>
-    <input id="callsign" placeholder="WJA550L" />
+      <!-- Generator Page -->
+      <div id="generatorPage">
+        <div class="topRow">
+          <div>
+            <h2>PDC Generator</h2>
+            <p class="subtitle">Fast PDC builder • If you want a different format added, MSG @aviator.kid on discord • copy is Discord-ready</p>
+          </div>
+        </div>
+        <div class="accent"></div>
 
-    <div class="row">
-      <div>
+        <!-- Shared -->
+        <label>Callsign</label>
+        <input id="callsign" placeholder="WJA550L / DAL125 / AAL3" />
+
         <label>Route (if N/A → GPS DCT)</label>
         <input id="route" placeholder="N/A or GPS Direct" />
-      </div>
-      <div>
-        <label>RWY</label>
-        <input id="runway" placeholder="13" />
-      </div>
-    </div>
 
-    <div class="row">
-      <div>
-        <label>INTL FL (optional)</label>
-        <input id="intlFL" placeholder="020" />
-      </div>
-      <div>
-        <label>CLIMB FL</label>
-        <input id="climbFL" placeholder="040" />
-      </div>
-    </div>
+        <!-- ATC24 SECTION -->
+        <div id="atc24Section" class="modeSection" style="display:block;">
+          <div class="sectionTitle">ATC24 Standard Fields</div>
 
-    <div class="row">
-      <div>
-        <label>DEP FREQ</label>
-        <input id="depFreq" placeholder="132.3" />
-      </div>
-      <div>
-        <label>QNH</label>
-        <input id="qnh" placeholder="1013" />
-      </div>
-    </div>
+          <div class="row">
+            <div>
+              <label>Destination (Arrival)</label>
+              <input id="atc24_dest" placeholder="IPPH" />
+            </div>
+            <div>
+              <label>INTL FL (optional)</label>
+              <input id="atc24_intlFL" placeholder="020" />
+            </div>
+          </div>
 
-    <div class="row">
-      <div>
-        <label>TRANS ALT (optional)</label>
-        <input id="transAlt" placeholder="1000" />
+          <div class="row">
+            <div>
+              <label>CLIMB FL</label>
+              <input id="atc24_climbFL" placeholder="040" />
+            </div>
+            <div>
+              <label>RWY</label>
+              <input id="atc24_runway" placeholder="13" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>DEP FREQ</label>
+              <input id="atc24_depFreq" placeholder="132.300" />
+            </div>
+            <div>
+              <label>QNH (optional)</label>
+              <input id="atc24_qnh" placeholder="1013" />
+            </div>
+          </div>
+
+          <label>REMAIN TWR UNTIL (optional)</label>
+          <input id="atc24_remainTwrUntil" placeholder="010" />
+
+          <div class="hint">
+            Output: CALLSIGN | CLEARED TO DEST | VIA ROUTE | INTL (optional) | CLIMB | RWY | DEP FREQ | QNH (optional) | REMAIN TWR UNTIL (optional) | SQUAWK | DO NOT READBACK PDC
+          </div>
+        </div>
+
+        <!-- VATUSA SECTION -->
+        <div id="vatusaSection" class="modeSection">
+          <div class="sectionTitle">VATUSA Fields</div>
+
+          <div class="row">
+            <div>
+              <label>Departure ICAO</label>
+              <input id="vat_dep" placeholder="IFRD" />
+            </div>
+            <div>
+              <label>Destination ICAO</label>
+              <input id="vat_dest" placeholder="IPPH" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Equipment</label>
+              <input id="vat_equip" placeholder="B738/L" />
+            </div>
+            <div>
+              <label>Filed Altitude</label>
+              <input id="vat_filedAlt" placeholder="FL350" />
+            </div>
+          </div>
+
+          <label>SID</label>
+          <input id="vat_sid" placeholder="SUMMA2" />
+
+          <label>Initial Altitude (optional)</label>
+          <input id="vat_initial" placeholder="FL050" />
+
+          <div class="row">
+            <div>
+              <label>Departure Frequency</label>
+              <input id="vat_dpFreq" placeholder="124.850" />
+            </div>
+            <div>
+              <label>Ground Frequency</label>
+              <input id="vat_gndFreq" placeholder="121.900" />
+            </div>
+          </div>
+
+          <label>Contact ground for</label>
+          <div class="toggleWrap" role="tablist" aria-label="Ground contact for">
+            <div id="pillPush" class="pill active" role="tab" aria-selected="true" tabindex="0">
+              PUSH
+              <small>CTC ground for push</small>
+            </div>
+            <div id="pillTaxi" class="pill" role="tab" aria-selected="false" tabindex="0">
+              TAXI
+              <small>CTC ground for taxi</small>
+            </div>
+          </div>
+
+          <div class="hint">This only changes “CTC ___ FOR PUSH/TAXI”.</div>
+        </div>
+
+        <div class="buttons">
+          <button id="gen" class="action" type="button">Generate</button>
+          <button id="copy" class="action" type="button">Copy Output</button>
+        </div>
+
+        <pre id="out"></pre>
       </div>
-      <div>
-        <label>REMAIN TWR UNTIL (optional)</label>
-        <input id="remainTwrUntil" placeholder="010" />
+
+      <!-- Instructions Page -->
+      <div id="instructionsPage" style="display:none;">
+        <div class="topRow">
+          <div>
+            <h2>Instructions</h2>
+            <p class="subtitle">Quick guide for controllers — pick a format, fill fields, generate, copy.</p>
+          </div>
+        </div>
+        <div class="accent"></div>
+
+        <ul class="steps">
+          <li>
+            <b>1) Pick a PDC Type</b>
+            Use the sidebar: <span class="chip">ATC24 Standard</span> or <span class="chip">VATUSA</span>.
+          </li>
+          <li>
+            <b>2) Fill the fields</b>
+            <div class="chipRow">
+              <span class="chip">Callsign</span>
+              <span class="chip">Route</span>
+              <span class="chip">(ATC24) Dest / Climb / RWY / Dep Freq</span>
+              <span class="chip">(VATUSA) Dep/Dest / Equip / Alt / SID</span>
+            </div>
+          </li>
+          <li>
+            <b>3) Generate</b>
+            Click <span class="chip">Generate</span>. Squawk uses <span class="chip">0–7 only</span> and won’t repeat in the same tab session.
+          </li>
+          <li>
+            <b>4) Copy & send</b>
+            Click <span class="chip">Copy Output</span>. It wraps output in backticks for Discord.
+          </li>
+          <li>
+            <b>VATUSA ground contact toggle</b>
+            PUSH → <span class="chip">CTC ___ FOR PUSH</span> • TAXI → <span class="chip">CTC ___ FOR TAXI</span>
+          </li>
+          <li>
+            <b>Theme</b>
+            Toggle Light/Dark in the sidebar. Your choice is saved.
+          </li>
+        </ul>
+
+        <div class="sectionTitle">Examples</div>
+
+        <label style="margin-top:10px;">ATC24 Standard Example</label>
+        <pre style="min-height:0;">WJA550L | CLEARED TO IPPH | VIA GPS DCT | INTL FL020 | CLIMB FL040 | RWY 13 | DEP FREQ 132.300 | QNH 1013 | REMAIN TWR UNTIL FL010 | SQUAWK 0604 | DO NOT READBACK PDC</pre>
+
+        <label style="margin-top:14px;">VATUSA Example</label>
+        <pre style="min-height:0;">ACARS: PDC | CALLSIGN: DAL125 | EQUIPMENT: B738/L | DEPARTURE: IFRD | DESTINATION: IPPH | ROUTE: GPS DCT | ALTITUDE: FL350 | SQUAWK: 0623 | REMARKS: CLEARED SUMMA2 DEPARTURE CLIMB VIA SID EXP FL350 10 MIN AFT DP, DPFRQ 124.850 CTC 121.900 FOR TAXI</pre>
       </div>
-    </div>
 
-    <div class="buttons">
-      <button id="gen" type="button">Generate</button>
-      <button id="copy" type="button">Copy</button>
-    </div>
+      <!-- Credits Page -->
+      <div id="creditsPage" style="display:none;">
+        <div class="topRow">
+          <div>
+            <h2>Credits</h2>
+            <p class="subtitle">The people who helped build & test this tool.</p>
+          </div>
+        </div>
+        <div class="accent"></div>
 
-    <div class="hint">
-      Tip: Copy wraps the message in backticks so it pastes like a clean “code-style” PDC line in Discord.
-    </div>
+        <div class="creditCard">
+          <div class="creditRow">
+            <div class="creditRole">Head Developer</div>
+            <div class="creditName">polandball</div>
+          </div>
 
-    <pre id="out"></pre>
+          <div class="creditRow">
+            <div class="creditRole">VATUSA Idea & Testing</div>
+            <div class="creditName">YoItsAni</div>
+          </div>
+
+          <div class="creditRow" style="margin-bottom:0;">
+            <div class="creditRole">Testers</div>
+            <div class="creditName">k4rian, db25</div>
+          </div>
+
+          <div class="hint" style="margin-top:10px;">
+            If you helped and want to be listed, DM polandball.
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
 
-    // store used squawks in browser session so you don't repeat
-    const USED_KEY = "pdc_used_squawks_no89";
-    function getUsedSet() {
-      try {
-        const arr = JSON.parse(sessionStorage.getItem(USED_KEY) || "[]");
-        return new Set(arr);
-      } catch {
-        return new Set();
-      }
-    }
-    function saveUsedSet(set) {
-      sessionStorage.setItem(USED_KEY, JSON.stringify([...set]));
-    }
+    // ===== Pages =====
+    function setPage(page){
+      const gen = $("generatorPage");
+      const help = $("instructionsPage");
+      const cred = $("creditsPage");
 
-    function normalizeRoute(route) {
+      $("genPageBtn").classList.toggle("active", page === "gen");
+      $("helpPageBtn").classList.toggle("active", page === "help");
+      $("creditsPageBtn").classList.toggle("active", page === "credits");
+
+      gen.style.display = (page === "gen") ? "block" : "none";
+      help.style.display = (page === "help") ? "block" : "none";
+      cred.style.display = (page === "credits") ? "block" : "none";
+    }
+    $("genPageBtn").onclick = () => setPage("gen");
+    $("helpPageBtn").onclick = () => setPage("help");
+    $("creditsPageBtn").onclick = () => setPage("credits");
+
+    // ===== Mode switching =====
+    let pdcMode = "ATC24";
+    function setMode(mode){
+      pdcMode = mode;
+
+      $("atc24Btn").classList.toggle("active", mode === "ATC24");
+      $("vatusaBtn").classList.toggle("active", mode === "VATUSA");
+
+      $("atc24Section").style.display = (mode === "ATC24") ? "block" : "none";
+      $("vatusaSection").style.display = (mode === "VATUSA") ? "block" : "none";
+    }
+    $("atc24Btn").onclick = () => setMode("ATC24");
+    $("vatusaBtn").onclick = () => setMode("VATUSA");
+
+    // ===== Theme toggle (saved) =====
+    const THEME_KEY = "pdc_theme";
+    function applyTheme(theme){
+      document.body.classList.toggle("dark", theme === "dark");
+      const sw = $("themeSwitch");
+      const isDark = theme === "dark";
+      sw.classList.toggle("on", isDark);
+      sw.setAttribute("aria-checked", isDark ? "true" : "false");
+      localStorage.setItem(THEME_KEY, theme);
+    }
+    function toggleTheme(){
+      const nowDark = document.body.classList.contains("dark");
+      applyTheme(nowDark ? "light" : "dark");
+    }
+    $("themeSwitch").onclick = toggleTheme;
+    $("themeSwitch").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") toggleTheme(); };
+    applyTheme(localStorage.getItem(THEME_KEY) || "light");
+
+    // ===== VATUSA toggle state =====
+    let groundContactMode = "PUSH";
+    function setVatusaToggle(mode){
+      groundContactMode = mode;
+      $("pillPush").classList.toggle("active", mode === "PUSH");
+      $("pillTaxi").classList.toggle("active", mode === "TAXI");
+      $("pillPush").setAttribute("aria-selected", mode === "PUSH" ? "true" : "false");
+      $("pillTaxi").setAttribute("aria-selected", mode === "TAXI" ? "true" : "false");
+    }
+    $("pillPush").onclick = () => setVatusaToggle("PUSH");
+    $("pillTaxi").onclick = () => setVatusaToggle("TAXI");
+    $("pillPush").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("PUSH"); };
+    $("pillTaxi").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("TAXI"); };
+
+    // ===== Helpers =====
+    function normalizeRoute(route){
       const r = String(route || "").trim().toUpperCase();
       if (!r || r === "N/A" || r === "NA") return "GPS DCT";
       return r;
     }
-
-    function toFL(value) {
+    function toFL(value){
       const v = String(value ?? "").trim().toUpperCase();
       if (!v) return "";
       if (v.startsWith("FL")) return v;
@@ -256,13 +737,23 @@
       return `FL${digits}`;
     }
 
-    function generateUniqueSquawk() {
-      // Allowed digits: 0-7 ONLY (so 8/9 never appear)
+    // ===== Session-unique squawk 0–7 only =====
+    const USED_KEY = "pdc_used_squawks_no89";
+    function getUsedSet(){
+      try{
+        return new Set(JSON.parse(sessionStorage.getItem(USED_KEY) || "[]"));
+      } catch {
+        return new Set();
+      }
+    }
+    function saveUsedSet(set){
+      sessionStorage.setItem(USED_KEY, JSON.stringify([...set]));
+    }
+    function generateUniqueSquawk(){
       const used = getUsedSet();
-      for (let attempts = 0; attempts < 5000; attempts++) {
+      for (let attempts = 0; attempts < 5000; attempts++){
         let code = "";
         for (let i = 0; i < 4; i++) code += String(Math.floor(Math.random() * 8)); // 0..7
-        if (!/^[0-7]{4}$/.test(code)) continue;
         if (used.has(code)) continue;
         used.add(code);
         saveUsedSet(used);
@@ -271,50 +762,80 @@
       throw new Error("Could not generate a unique squawk (session exhausted).");
     }
 
+    // ===== Generate =====
     $("gen").onclick = () => {
       const callsign = $("callsign").value.trim().toUpperCase();
-      if (!callsign) {
+      if (!callsign){
         $("out").textContent = "Error: Callsign is required.";
         return;
       }
 
       const route = normalizeRoute($("route").value);
-      const runway = $("runway").value.trim();
-      const depFreq = $("depFreq").value.trim();
-      const qnh = $("qnh").value.trim();
-      const intlFL = toFL($("intlFL").value);
-      const climbFL = toFL($("climbFL").value);
-      const transAlt = $("transAlt").value.trim();
-      const remainTwrUntil = toFL($("remainTwrUntil").value);
-
       const squawk = generateUniqueSquawk();
 
-      const parts = [];
-      parts.push(callsign);
+      if (pdcMode === "ATC24"){
+        const dest = $("atc24_dest").value.trim().toUpperCase();
+        const intlFL = toFL($("atc24_intlFL").value);
+        const climbFL = toFL($("atc24_climbFL").value);
+        const runway = $("atc24_runway").value.trim();
+        const depFreq = $("atc24_depFreq").value.trim();
+        const qnh = $("atc24_qnh").value.trim();
+        const remainTwrUntil = toFL($("atc24_remainTwrUntil").value);
 
-      // "VIA " + route (no parentheses)
-      parts.push(`VIA ${route}`);
+        if (!dest)    { $("out").textContent = "Error: Destination is required for ATC24 Standard."; return; }
+        if (!climbFL) { $("out").textContent = "Error: CLIMB FL is required for ATC24 Standard."; return; }
+        if (!runway)  { $("out").textContent = "Error: RWY is required for ATC24 Standard."; return; }
+        if (!depFreq) { $("out").textContent = "Error: DEP FREQ is required for ATC24 Standard."; return; }
 
-      if (intlFL) parts.push(`INTL ${intlFL}`);
-      if (climbFL) parts.push(`CLIMB ${climbFL}`);
-      if (runway) parts.push(`RWY ${runway}`);
-      if (depFreq) parts.push(`DEP FREQ ${depFreq}`);
-      if (qnh) parts.push(`QNH ${qnh}`);
-      if (transAlt) parts.push(`TRANS ALT ${transAlt}`);
-      if (remainTwrUntil) parts.push(`REMAIN TWR UNTIL ${remainTwrUntil}`);
+        const parts = [];
+        parts.push(callsign);
+        parts.push(`CLEARED TO ${dest}`);
+        parts.push(`VIA ${route}`);
+        if (intlFL) parts.push(`INTL ${intlFL}`);
+        parts.push(`CLIMB ${climbFL}`);
+        parts.push(`RWY ${runway}`);
+        parts.push(`DEP FREQ ${depFreq}`);
+        if (qnh) parts.push(`QNH ${qnh}`);
+        if (remainTwrUntil) parts.push(`REMAIN TWR UNTIL ${remainTwrUntil}`);
+        parts.push(`SQUAWK ${squawk}`);
+        parts.push(`DO NOT READBACK PDC`);
 
-      // squawk last, and then the instruction
-      parts.push(`SQUAWK ${squawk}`);
-      parts.push(`DO NOT READBACK PDC`);
+        $("out").textContent = parts.join(" | ");
+        return;
+      }
 
-      $("out").textContent = parts.join(" | ");
+      // ===== VATUSA =====
+      const dep = $("vat_dep").value.trim().toUpperCase();
+      const dest = $("vat_dest").value.trim().toUpperCase();
+      const equip = $("vat_equip").value.trim().toUpperCase();
+      const filedAlt = toFL($("vat_filedAlt").value);
+      const sid = $("vat_sid").value.trim().toUpperCase();
+      const initial = toFL($("vat_initial").value);
+      const dpFreq = $("vat_dpFreq").value.trim();
+      const gndFreq = $("vat_gndFreq").value.trim();
+
+      const contactPart =
+        (groundContactMode === "PUSH")
+          ? `CTC ${gndFreq} FOR PUSH`
+          : `CTC ${gndFreq} FOR TAXI`;
+
+      const maintainPart = initial ? ` EXCEPT MAINTAIN ${initial}` : "";
+
+      $("out").textContent =
+        `ACARS: PDC | CALLSIGN: ${callsign}` +
+        ` | EQUIPMENT: ${equip}` +
+        ` | DEPARTURE: ${dep}` +
+        ` | DESTINATION: ${dest}` +
+        ` | ROUTE: ${route}` +
+        ` | ALTITUDE: ${filedAlt}` +
+        ` | SQUAWK: ${squawk}` +
+        ` | REMARKS: CLEARED ${sid} DEPARTURE CLIMB VIA SID${maintainPart} EXP ${filedAlt} 10 MIN AFT DP, DPFRQ ${dpFreq} ${contactPart}`;
     };
 
+    // ===== Copy =====
     $("copy").onclick = async () => {
       const text = $("out").textContent.trim();
       if (!text) return;
-
-      // Copies wrapped in backticks so it pastes as a code-style message
       await navigator.clipboard.writeText("`" + text + "`");
     };
   </script>
