@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PDC Generator</title>
+  <title>24PDC</title>
 
   <!-- Tab icon -->
   <link rel="icon" type="image/png" href="favicon.png">
@@ -209,7 +209,6 @@
     }
 
     textarea{ min-height: 90px; resize: vertical; }
-
     input::placeholder{ color: var(--muted); opacity: 0.75; }
 
     input:focus, select:focus, textarea:focus{
@@ -369,7 +368,6 @@
       margin-bottom:10px;
     }
     .steps b{ display:block; margin-bottom:4px; letter-spacing:-0.1px; }
-    .chipRow{ display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; }
     .chip{
       padding:6px 10px;
       border-radius:999px;
@@ -552,12 +550,11 @@
     </div>
 
     <div class="card">
-
       <div id="generatorPage">
         <div class="topRow">
           <div>
             <h2>PDC Generator</h2>
-            <p class="subtitle">Fast PDC builder • copy is Discord-ready</p>
+            <p class="subtitle">Fast PDC builder </p>
           </div>
         </div>
         <div class="accent"></div>
@@ -617,10 +614,6 @@
 
           <label>Extra End Text (optional)</label>
           <input id="atc24_extraEnd" placeholder="e.g. CONTACT GND WHEN READY / REMAIN VFR / etc." />
-
-          <div class="hint">
-            Output: CALLSIGN | CLEARED TO DEST | VIA ROUTE | INTL (optional) | CLIMB | RWY | DEP FREQ | QNH (optional) | REMAIN TWR UNTIL (optional) | SQUAWK | (end line) | (extra)
-          </div>
         </div>
 
         <div id="vatusaSection" class="modeSection">
@@ -648,8 +641,8 @@
             </div>
           </div>
 
-          <label>SID</label>
-          <input id="vat_sid" placeholder="SUMMA2" />
+          <label>SID (optional — leave blank for GPS DCT)</label>
+          <input id="vat_sid" placeholder="SUMMA2 (or leave blank)" />
 
           <label>Initial Altitude (optional)</label>
           <input id="vat_initial" placeholder="FL050" />
@@ -676,8 +669,6 @@
               <small>CTC ground for taxi</small>
             </div>
           </div>
-
-          <div class="hint">This only changes “CTC ___ FOR PUSH/TAXI”.</div>
         </div>
 
         <div class="buttons">
@@ -702,7 +693,7 @@
           <li><b>2) Fill the fields</b> Callsign + Route, then the format-specific fields.</li>
           <li><b>3) Generate</b> Squawk uses <span class="chip">0–7 only</span> and won’t repeat in the same tab session.</li>
           <li><b>4) Copy</b> Copy wraps output in backticks for Discord.</li>
-          <li><b>ATC24 End Line</b> Override/remove “DO NOT READBACK PDC” and add extra text if needed.</li>
+          <li><b>VATUSA SID</b> Optional — leave blank (or N/A) for GPS DCT traffic.</li>
         </ul>
       </div>
 
@@ -736,7 +727,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -779,6 +769,9 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
+    // ======================
+    // Pages
+    // ======================
     function setPage(page){
       const gen = $("generatorPage");
       const help = $("instructionsPage");
@@ -796,6 +789,9 @@
     $("helpPageBtn").onclick = () => setPage("help");
     $("creditsPageBtn").onclick = () => setPage("credits");
 
+    // ======================
+    // Mode Switcher
+    // ======================
     let pdcMode = "ATC24";
     function setMode(mode){
       pdcMode = mode;
@@ -808,6 +804,9 @@
     $("atc24Btn").onclick = () => setMode("ATC24");
     $("vatusaBtn").onclick = () => setMode("VATUSA");
 
+    // ======================
+    // Theme Toggle
+    // ======================
     const THEME_KEY = "pdc_theme";
     function applyTheme(theme){
       document.body.classList.toggle("dark", theme === "dark");
@@ -825,6 +824,9 @@
     $("themeSwitch").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") toggleTheme(); };
     applyTheme(localStorage.getItem(THEME_KEY) || "light");
 
+    // ======================
+    // VATUSA Push/Taxi Toggle
+    // ======================
     let groundContactMode = "PUSH";
     function setVatusaToggle(mode){
       groundContactMode = mode;
@@ -838,11 +840,15 @@
     $("pillPush").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("PUSH"); };
     $("pillTaxi").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("TAXI"); };
 
+    // ======================
+    // Helpers
+    // ======================
     function normalizeRoute(route){
       const r = String(route || "").trim().toUpperCase();
       if (!r || r === "N/A" || r === "NA") return "GPS DCT";
       return r;
     }
+
     function toFL(value){
       const v = String(value ?? "").trim().toUpperCase();
       if (!v) return "";
@@ -851,6 +857,7 @@
       return `FL${digits}`;
     }
 
+    // Squawk: digits 0-7 only (no 8/9) + unique per tab session
     const USED_KEY = "pdc_used_squawks_no89";
     function getUsedSet(){
       try{ return new Set(JSON.parse(sessionStorage.getItem(USED_KEY) || "[]")); }
@@ -872,6 +879,9 @@
       throw new Error("Could not generate a unique squawk (session exhausted).");
     }
 
+    // ======================
+    // Generate + Copy
+    // ======================
     $("gen").onclick = () => {
       const callsign = $("callsign").value.trim().toUpperCase();
       if (!callsign){ $("out").textContent = "Error: Callsign is required."; return; }
@@ -917,17 +927,22 @@
         return;
       }
 
+      // VATUSA
       const dep = $("vat_dep").value.trim().toUpperCase();
       const dest = $("vat_dest").value.trim().toUpperCase();
       const equip = $("vat_equip").value.trim().toUpperCase();
       const filedAlt = toFL($("vat_filedAlt").value);
-      const sid = $("vat_sid").value.trim().toUpperCase();
+
+      // SID optional
+      const sidRaw = $("vat_sid").value.trim().toUpperCase();
+      const sidClean = (!sidRaw || sidRaw === "N/A" || sidRaw === "NA") ? "" : sidRaw;
+
       const initial = toFL($("vat_initial").value);
       const dpFreq = $("vat_dpFreq").value.trim();
       const gndFreq = $("vat_gndFreq").value.trim();
 
-      if (!dep || !dest || !equip || !filedAlt || !sid || !dpFreq || !gndFreq){
-        $("out").textContent = "Error: For VATUSA, fill Departure, Destination, Equipment, Filed Altitude, SID, DP Freq, and Ground Freq.";
+      if (!dep || !dest || !equip || !filedAlt || !dpFreq || !gndFreq){
+        $("out").textContent = "Error: For VATUSA, fill Departure, Destination, Equipment, Filed Altitude, DP Freq, and Ground Freq.";
         return;
       }
 
@@ -938,6 +953,11 @@
 
       const maintainPart = initial ? ` EXCEPT MAINTAIN ${initial}` : "";
 
+      const remarks =
+        sidClean
+          ? `CLEARED ${sidClean} DEPARTURE CLIMB VIA SID${maintainPart} EXP ${filedAlt} 10 MIN AFT DP, DPFRQ ${dpFreq} ${contactPart}`
+          : `CLEARED TO ${dest} VIA ROUTE${maintainPart} EXP ${filedAlt} 10 MIN AFT DP, DPFRQ ${dpFreq} ${contactPart}`;
+
       $("out").textContent =
         `ACARS: PDC | CALLSIGN: ${callsign}` +
         ` | EQUIPMENT: ${equip}` +
@@ -946,7 +966,7 @@
         ` | ROUTE: ${route}` +
         ` | ALTITUDE: ${filedAlt}` +
         ` | SQUAWK: ${squawk}` +
-        ` | REMARKS: CLEARED ${sid} DEPARTURE CLIMB VIA SID${maintainPart} EXP ${filedAlt} 10 MIN AFT DP, DPFRQ ${dpFreq} ${contactPart}`;
+        ` | REMARKS: ${remarks}`;
     };
 
     $("copy").onclick = async () => {
@@ -955,6 +975,9 @@
       await navigator.clipboard.writeText("`" + text + "`");
     };
 
+    // ======================
+    // Toast
+    // ======================
     let toastTimer = null;
     function showToast(msg, type){
       const t = $("toast");
@@ -965,8 +988,8 @@
       toastTimer = setTimeout(() => { t.style.display = "none"; }, 3800);
     }
 
-    // ===== Rating (Discord webhook) =====
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1458020445336113227/NvbjEyGk2JaVYBmSVbdrnvLVUCjUKg6xaKYnaZqkzIz9TL_Bb2t7o-AbZVVL-hhnrf90";
+
+    const RATE_ENDPOINT = "https://24pdc.emersburgh2028.workers.dev";
 
     const RATE_KEY = "pdc_has_rated";
     let selectedRating = 0;
@@ -1023,34 +1046,27 @@
       }
 
       const comment = $("rateComment").value.trim();
-      const page = location.href;
 
       try{
-        const payload = {
-          username: "24PDC Ratings",
-          content:
-            `⭐ **New Rating**: **${selectedRating}/5**\n` +
-            `📝 Comment: ${comment ? comment : "_(none)_"}\n` +
-            `🔗 Page: ${page}\n` +
-            `🕒 Time: ${new Date().toISOString()}`
-        };
-
-        const res = await fetch(DISCORD_WEBHOOK_URL, {
+        const res = await fetch(RATE_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            rating: selectedRating,
+            comment: comment,
+            page: location.href
+          })
         });
 
-        if (!res.ok) throw new Error("Webhook failed");
+        if (!res.ok) throw new Error("Endpoint failed");
 
         localStorage.setItem(RATE_KEY, "1");
         showToast("Thanks! Rating sent ✅", "ok");
         closeRate();
       } catch (err){
-        showToast("Couldn’t send rating (webhook error). Try again later.", "err");
+        showToast("Couldn’t send rating (endpoint error). Try again later.", "err");
       }
     };
   </script>
 </body>
 </html>
-
