@@ -1153,8 +1153,8 @@ async function fetchFlightPlans() {
     const airport = $("fpAirportFilter").value || "ALL";
 
     const response = await fetch(
-      `http://localhost:3000/flightplans?airport=${airport}`
-    );
+  `https://two4pdc-flightplan-server.onrender.com/flightplans?airport=${airport}`
+);
 
     const data = await response.json();
 
