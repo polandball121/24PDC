@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>24PDC</title>
 
-  <!-- Tab icon -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="shortcut icon" href="favicon.png">
 
@@ -18,28 +17,20 @@
       --border: rgba(17,24,39,0.10);
       --shadow: 0 10px 28px rgba(0,0,0,0.09);
       --shadowSoft: 0 6px 16px rgba(0,0,0,0.06);
-
       --accent: #2d5dfc;
-
       --inputBg: #ffffff;
       --inputBorder: #d1d5db;
-
       --btnPrimary: #2d5dfc;
       --btnPrimaryHover: #1e4be0;
-
       --btnDark: #111827;
       --btnDarkHover: #000000;
-
       --pillBg: #f3f4f6;
       --pillActiveBg: #111827;
       --pillActiveText: #ffffff;
-
       --preBg: #0b1220;
       --preText: #4ade80;
       --preBorder: #111827;
-
       --divider: #eef2f7;
-
       --danger: #ef4444;
       --success: #22c55e;
     }
@@ -52,26 +43,19 @@
       --border: rgba(255,255,255,0.10);
       --shadow: 0 10px 28px rgba(0,0,0,0.40);
       --shadowSoft: 0 6px 16px rgba(0,0,0,0.35);
-
       --accent: #60a5fa;
-
       --inputBg: #0b1220;
       --inputBorder: rgba(255,255,255,0.16);
-
       --btnPrimary: #60a5fa;
       --btnPrimaryHover: #3b82f6;
-
       --btnDark: #111827;
       --btnDarkHover: #0b1220;
-
       --pillBg: rgba(255,255,255,0.06);
       --pillActiveBg: #e5e7eb;
       --pillActiveText: #0b1220;
-
       --preBg: #020617;
       --preText: #86efac;
       --preBorder: rgba(255,255,255,0.12);
-
       --divider: rgba(255,255,255,0.08);
     }
 
@@ -216,7 +200,10 @@
       outline: none;
       box-shadow: 0 0 0 3px rgba(45,93,252,0.14);
     }
-    body.dark input:focus, body.dark select:focus, body.dark textarea:focus{
+
+    body.dark input:focus,
+    body.dark select:focus,
+    body.dark textarea:focus{
       box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
     }
 
@@ -318,11 +305,13 @@
       justify-content:space-between;
       gap:10px;
     }
+
     .switchLabel{
       font-size:13px;
       color: var(--muted);
       font-weight: 850;
     }
+
     .switch{
       position: relative;
       width: 48px;
@@ -334,6 +323,7 @@
       transition: .2s;
       flex: 0 0 auto;
     }
+
     .switchKnob{
       position:absolute;
       top: 3px;
@@ -346,15 +336,19 @@
       transition: .2s;
       box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
+
     body.dark .switchKnob{ box-shadow: 0 4px 10px rgba(0,0,0,0.35); }
+
     .switch.on{
       background: rgba(45,93,252,0.18);
       border-color: rgba(45,93,252,0.35);
     }
+
     body.dark .switch.on{
       background: rgba(96,165,250,0.18);
       border-color: rgba(96,165,250,0.35);
     }
+
     .switch.on .switchKnob{ left: 23px; }
 
     .modeSection{ display:none; }
@@ -368,6 +362,7 @@
       margin-bottom:10px;
     }
     .steps b{ display:block; margin-bottom:4px; letter-spacing:-0.1px; }
+
     .chip{
       padding:6px 10px;
       border-radius:999px;
@@ -384,6 +379,7 @@
       border-radius: 14px;
       background: rgba(255,255,255,0.02);
     }
+
     .creditRow{
       display:flex;
       align-items:center;
@@ -395,6 +391,7 @@
       border: 1px solid var(--border);
       margin-bottom: 10px;
     }
+
     .creditRole{ font-weight: 950; letter-spacing: -0.2px; }
     .creditName{ font-weight: 900; color: var(--accent); text-align:right; }
 
@@ -413,6 +410,7 @@
       box-shadow: var(--shadow);
       transition: transform .15s, filter .15s;
     }
+
     .fab:hover{ transform: translateY(-2px); filter: brightness(0.98); }
 
     .modalOverlay{
@@ -425,6 +423,7 @@
       z-index: 10000;
       padding: 16px;
     }
+
     .modal{
       width: 100%;
       max-width: 520px;
@@ -434,18 +433,21 @@
       box-shadow: var(--shadow);
       padding: 18px;
     }
+
     .modalHeader{
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
     }
+
     .modalTitle{
       font-size: 18px;
       font-weight: 950;
       margin: 0;
       letter-spacing: -0.2px;
     }
+
     .modalClose{
       border: none;
       background: var(--pillBg);
@@ -464,12 +466,14 @@
       font-size: 28px;
       user-select: none;
     }
+
     .star{
       cursor: pointer;
       filter: grayscale(1);
       opacity: 0.65;
       transition: transform .1s, opacity .1s, filter .1s;
     }
+
     .star.active{ filter: grayscale(0); opacity: 1; }
     .star:hover{ transform: translateY(-1px); }
 
@@ -479,6 +483,7 @@
       margin-top: 12px;
       flex-wrap: wrap;
     }
+
     .btnSmall{
       border:none;
       border-radius: 12px;
@@ -487,6 +492,7 @@
       cursor: pointer;
       transition: .15s;
     }
+
     .btnSend{ background: var(--btnPrimary); color:#fff; }
     .btnSend:hover{ background: var(--btnPrimaryHover); }
     .btnCancel{ background: var(--pillBg); color: var(--text); border: 1px solid var(--border); }
@@ -507,8 +513,51 @@
       font-size: 13px;
       font-weight: 850;
     }
+
     .toast.ok{ border-left: 5px solid var(--success); }
     .toast.err{ border-left: 5px solid var(--danger); }
+
+    .flightPlanBox{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--divider);
+    }
+
+    .flightPlanBox input{
+      margin-bottom: 8px;
+    }
+
+    .fpList{
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .fpItem{
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--pillBg);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .fpItem:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+    }
+
+    .fpCallsign{
+      font-weight: 950;
+      font-size: 13px;
+    }
+
+    .fpDetails{
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
 
     @media (max-width: 820px){
       .layout{ grid-template-columns: 1fr; }
@@ -535,6 +584,45 @@
         <div class="hint">Fields change based on the format.</div>
       </div>
 
+      <div class="flightPlanBox">
+        <h3 style="margin:0 0 10px 0; font-size:15px;">Recent Flight Plans</h3>
+
+        <select id="fpAirportFilter">
+  <option value="ALL">All Airports</option>
+  <option value="IFRD">IFRD</option>
+  <option value="IMLR">IMLR</option>
+  <option value="IPPH">IPPH</option>
+  <option value="ITKO">ITKO</option>
+  <option value="ISKL">ISKL</option>
+  <option value="IZOL">IZOL</option>
+  <option value="ILAR">ILAR</option>
+  <option value="IBTH">IBTH</option>
+  <option value="IKFL">IKFL</option>
+</select>
+
+        <div class="fpList" id="fpList">
+          <div class="fpItem">
+            <div class="fpCallsign">DAL125</div>
+            <div class="fpDetails">
+              IFRD → IPPH<br>
+              A320 • FL040
+            </div>
+          </div>
+
+          <div class="fpItem">
+            <div class="fpCallsign">UAL332</div>
+            <div class="fpDetails">
+              IPPH → ITKO<br>
+              B738 • FL320
+            </div>
+          </div>
+        </div>
+
+        <div class="hint">
+          Upcoming feature: click a flight plan to auto-fill the generator.
+        </div>
+      </div>
+
       <div class="sideGroup">
         <div class="switchRow">
           <div>
@@ -554,7 +642,7 @@
         <div class="topRow">
           <div>
             <h2>24PDC</h2>
-            <p class="subtitle">Fast PDC builder </p>
+            <p class="subtitle">Fast PDC builder</p>
           </div>
         </div>
         <div class="accent"></div>
@@ -769,9 +857,6 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
-    // ======================
-    // Pages
-    // ======================
     function setPage(page){
       const gen = $("generatorPage");
       const help = $("instructionsPage");
@@ -785,14 +870,13 @@
       help.style.display = (page === "help") ? "block" : "none";
       cred.style.display = (page === "credits") ? "block" : "none";
     }
+
     $("genPageBtn").onclick = () => setPage("gen");
     $("helpPageBtn").onclick = () => setPage("help");
     $("creditsPageBtn").onclick = () => setPage("credits");
 
-    // ======================
-    // Mode Switcher
-    // ======================
     let pdcMode = "ATC24";
+
     function setMode(mode){
       pdcMode = mode;
       $("atc24Btn").classList.toggle("active", mode === "ATC24");
@@ -801,13 +885,12 @@
       $("atc24Section").style.display = (mode === "ATC24") ? "block" : "none";
       $("vatusaSection").style.display = (mode === "VATUSA") ? "block" : "none";
     }
+
     $("atc24Btn").onclick = () => setMode("ATC24");
     $("vatusaBtn").onclick = () => setMode("VATUSA");
 
-    // ======================
-    // Theme Toggle
-    // ======================
     const THEME_KEY = "pdc_theme";
+
     function applyTheme(theme){
       document.body.classList.toggle("dark", theme === "dark");
       const sw = $("themeSwitch");
@@ -816,18 +899,18 @@
       sw.setAttribute("aria-checked", isDark ? "true" : "false");
       localStorage.setItem(THEME_KEY, theme);
     }
+
     function toggleTheme(){
       const nowDark = document.body.classList.contains("dark");
       applyTheme(nowDark ? "light" : "dark");
     }
+
     $("themeSwitch").onclick = toggleTheme;
     $("themeSwitch").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") toggleTheme(); };
     applyTheme(localStorage.getItem(THEME_KEY) || "light");
 
-    // ======================
-    // VATUSA Push/Taxi Toggle
-    // ======================
     let groundContactMode = "PUSH";
+
     function setVatusaToggle(mode){
       groundContactMode = mode;
       $("pillPush").classList.toggle("active", mode === "PUSH");
@@ -835,14 +918,12 @@
       $("pillPush").setAttribute("aria-selected", mode === "PUSH" ? "true" : "false");
       $("pillTaxi").setAttribute("aria-selected", mode === "TAXI" ? "true" : "false");
     }
+
     $("pillPush").onclick = () => setVatusaToggle("PUSH");
     $("pillTaxi").onclick = () => setVatusaToggle("TAXI");
     $("pillPush").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("PUSH"); };
     $("pillTaxi").onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") setVatusaToggle("TAXI"); };
 
-    // ======================
-    // Helpers
-    // ======================
     function normalizeRoute(route){
       const r = String(route || "").trim().toUpperCase();
       if (!r || r === "N/A" || r === "NA") return "GPS DCT";
@@ -857,15 +938,17 @@
       return `FL${digits}`;
     }
 
-    // Squawk: digits 0-7 only (no 8/9) + unique per tab session
     const USED_KEY = "pdc_used_squawks_no89";
+
     function getUsedSet(){
       try{ return new Set(JSON.parse(sessionStorage.getItem(USED_KEY) || "[]")); }
       catch{ return new Set(); }
     }
+
     function saveUsedSet(set){
       sessionStorage.setItem(USED_KEY, JSON.stringify([...set]));
     }
+
     function generateUniqueSquawk(){
       const used = getUsedSet();
       for (let attempts = 0; attempts < 5000; attempts++){
@@ -879,9 +962,6 @@
       throw new Error("Could not generate a unique squawk (session exhausted).");
     }
 
-    // ======================
-    // Generate + Copy
-    // ======================
     $("gen").onclick = () => {
       const callsign = $("callsign").value.trim().toUpperCase();
       if (!callsign){ $("out").textContent = "Error: Callsign is required."; return; }
@@ -897,7 +977,6 @@
         const depFreq = $("atc24_depFreq").value.trim();
         const qnh = $("atc24_qnh").value.trim();
         const remainTwrUntil = toFL($("atc24_remainTwrUntil").value);
-
         const endMode = $("atc24_endMode").value;
         const extraEnd = $("atc24_extraEnd").value.trim().toUpperCase();
 
@@ -927,16 +1006,12 @@
         return;
       }
 
-      // VATUSA
       const dep = $("vat_dep").value.trim().toUpperCase();
       const dest = $("vat_dest").value.trim().toUpperCase();
       const equip = $("vat_equip").value.trim().toUpperCase();
       const filedAlt = toFL($("vat_filedAlt").value);
-
-      // SID optional
       const sidRaw = $("vat_sid").value.trim().toUpperCase();
       const sidClean = (!sidRaw || sidRaw === "N/A" || sidRaw === "NA") ? "" : sidRaw;
-
       const initial = toFL($("vat_initial").value);
       const dpFreq = $("vat_dpFreq").value.trim();
       const gndFreq = $("vat_gndFreq").value.trim();
@@ -975,10 +1050,8 @@
       await navigator.clipboard.writeText("`" + text + "`");
     };
 
-    // ======================
-    // Toast
-    // ======================
     let toastTimer = null;
+
     function showToast(msg, type){
       const t = $("toast");
       t.className = "toast " + (type === "err" ? "err" : "ok");
@@ -988,9 +1061,7 @@
       toastTimer = setTimeout(() => { t.style.display = "none"; }, 3800);
     }
 
-
     const RATE_ENDPOINT = "https://24pdc.emersburgh2028.workers.dev";
-
     const RATE_KEY = "pdc_has_rated";
     let selectedRating = 0;
 
@@ -998,10 +1069,12 @@
       $("rateOverlay").style.display = "flex";
       $("rateOverlay").setAttribute("aria-hidden", "false");
     }
+
     function closeRate(){
       $("rateOverlay").style.display = "none";
       $("rateOverlay").setAttribute("aria-hidden", "true");
     }
+
     function paintStars(n){
       [...document.querySelectorAll(".star")].forEach(st => {
         const v = Number(st.dataset.v);
@@ -1040,6 +1113,7 @@
         closeRate();
         return;
       }
+
       if (!selectedRating){
         showToast("Pick a star rating first 🙂", "err");
         return;
@@ -1067,7 +1141,100 @@
         showToast("Couldn’t send rating (endpoint error). Try again later.", "err");
       }
     };
+	
+// ======================
+// REAL flight plan fetch + render
+// ======================
+
+let liveFlightPlans = [];
+
+async function fetchFlightPlans() {
+  try {
+    const airport = $("fpAirportFilter").value || "ALL";
+
+    const response = await fetch(
+      `http://localhost:3000/flightplans?airport=${airport}`
+    );
+
+    const data = await response.json();
+
+    liveFlightPlans = data.plans || [];
+
+    renderFlightPlans();
+  } catch (err) {
+    console.error("Could not fetch flight plans:", err);
+
+    $("fpList").innerHTML = `
+      <div class="fpItem">
+        <div class="fpCallsign">Connection Error</div>
+        <div class="fpDetails">
+          Could not connect to local flight plan server
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderFlightPlans() {
+  const list = $("fpList");
+
+  if (!liveFlightPlans.length) {
+    list.innerHTML = `
+      <div class="fpItem">
+        <div class="fpCallsign">No flight plans</div>
+        <div class="fpDetails">
+          Waiting for recent departures...
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = liveFlightPlans.map((fp, index) => `
+    <div class="fpItem" data-index="${index}">
+      <div class="fpCallsign">${fp.callsign}</div>
+      <div class="fpDetails">
+        ${fp.dep} → ${fp.dest}<br>
+        ${fp.aircraft} • FL${fp.flightlevel}<br>
+        ${fp.route || "GPS DCT"}
+      </div>
+    </div>
+  `).join("");
+
+  document.querySelectorAll(".fpItem").forEach((item, index) => {
+    item.addEventListener("click", () => {
+      const fp = liveFlightPlans[index];
+      if (!fp) return;
+
+      $("callsign").value = fp.callsign;
+      $("route").value = fp.route || "GPS DCT";
+
+      if (pdcMode === "ATC24") {
+        $("atc24_dest").value = fp.dest;
+        $("atc24_climbFL").value = fp.flightlevel;
+      }
+
+      if (pdcMode === "VATUSA") {
+        $("vat_dep").value = fp.dep;
+        $("vat_dest").value = fp.dest;
+        $("vat_equip").value = fp.aircraft;
+        $("vat_filedAlt").value = fp.flightlevel;
+      }
+
+      showToast(`Loaded ${fp.callsign} into the form ✅`, "ok");
+    });
+  });
+}
+
+// Refresh every 5 seconds
+setInterval(fetchFlightPlans, 5000);
+
+// Refresh when airport changes
+$("fpAirportFilter").addEventListener("change", fetchFlightPlans);
+
+// Initial fetch
+fetchFlightPlans();
+
   </script>
 </body>
 </html>
-
